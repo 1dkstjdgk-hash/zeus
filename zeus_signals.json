@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-03-19T16:29:32.810883",
+  "top_tickers": [
+    "SMR",
+    "USEG",
+    "SIDU",
+    "OKLO"
+  ],
+  "bucket_stats": {
+    "scores": {
+      "SMR": 83.3,
+      "USEG": 83.3,
+      "SIDU": 33.3,
+      "OKLO": 0.0
+    },
+    "tier_filter": "all"
+  }
+}

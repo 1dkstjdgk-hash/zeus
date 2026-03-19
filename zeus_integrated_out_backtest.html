@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmartScore v10 백테스트 리포트</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:#060d1a; --bg2:#0a1428; --bg3:#0f1e35; --bg4:#060f20;
+    --border:#1a2f50; --accent:#00d4ff; --green:#00ff88;
+    --red:#ff3366; --yellow:#ffd700; --text:#c8d8f0; --dim:#4a6080;
+    --mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;padding:28px 32px;max-width:1600px;margin:0 auto}
+  h1{font-size:1.5rem;color:var(--accent);margin-bottom:3px;letter-spacing:-.5px}
+  .sub{color:var(--dim);font-size:.82rem;margin-bottom:22px}
+  .tag{display:inline-block;background:#0a1e3a;border:1px solid #1a3a5c;border-radius:4px;padding:2px 8px;font-size:.75rem;color:#6a90c0;margin-left:6px;font-family:var(--mono)}
+  /* 판정 배너 */
+  .verdict{padding:12px 20px;border-radius:8px;border-left:4px solid #00ff88;
+    background:var(--bg3);margin-bottom:20px;font-size:.95rem;font-weight:600;color:#00ff88;
+    display:flex;align-items:center;gap:12px}
+  /* 메타 카드 */
+  .meta{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+  .card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+    padding:14px 22px;text-align:center;min-width:130px}
+  .card .val{font-size:1.35rem;font-weight:700;font-family:var(--mono);color:var(--accent)}
+  .card .lbl{font-size:.68rem;color:var(--dim);margin-top:3px}
+  .card.hi .val{color:#00ff88}
+  /* 섹션 타이틀 */
+  h2{font-size:1rem;color:var(--accent);margin:26px 0 10px;border-bottom:1px solid var(--border);padding-bottom:5px;display:flex;align-items:center;gap:6px}
+  /* 테이블 공통 */
+  table{width:100%;border-collapse:collapse;font-size:.8rem}
+  th{background:var(--bg3);color:var(--dim);padding:7px 9px;text-align:center;
+    border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
+  td{padding:6px 9px;border-bottom:1px solid var(--border);text-align:center;font-family:var(--mono)}
+  td:first-child{text-align:left;font-family:'Noto Sans KR',sans-serif;font-size:.82rem}
+  tr:hover td{background:var(--bg3)}
+  /* 그리드 */
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:20px}
+  @media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+  /* 카드 박스 */
+  .box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px}
+  /* 차트 */
+  .chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:20px}
+  /* 노트 */
+  .note{color:var(--dim);font-size:.72rem;margin-top:7px;line-height:1.65}
+  /* 배지 */
+  .badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.72rem;font-weight:700}
+  .badge-g{background:rgba(0,255,136,.15);color:#00ff88}
+  .badge-y{background:rgba(255,215,0,.12);color:#ffd700}
+  .badge-r{background:rgba(255,51,102,.12);color:#ff3366}
+</style>
+</head>
+<body>
+
+<h1>📊 SmartScore 백테스트 리포트 <span class="tag">v12</span><span class="tag">이중전략</span><span class="tag">T1기관팩터/T2+3샤프필터</span></h1>
+<div class="sub">
+  생성: 2026-03-09 21:01 &nbsp;·&nbsp;
+  종목 484개 &nbsp;·&nbsp; 기간 10y &nbsp;·&nbsp;
+  소요 2597초 &nbsp;·&nbsp; 관측치 848,094건
+</div>
+
+<div class="verdict">
+  🟢 유효 — 상위20%가 하위20% 대비 통계적으로 유의한 초과수익
+  <span style="font-size:.8rem;color:var(--dim);margin-left:auto">
+    20일 스프레드 +0.63%p &nbsp;|&nbsp; XS스프레드 +0.63%p
+  </span>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  전략A (TIER1 대형주) — 수익률 예측 지표
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div style="color:#4a6080;font-size:.72rem;margin:-10px 0 6px;letter-spacing:.5px">
+  ▶ 전략A: TIER1 대형주 — 기관 팩터 수익률 예측
+</div>
+<div class="meta">
+  <div class="card"><div class="val">848,094</div><div class="lbl">총 관측치</div></div>
+  <div class="card"><div class="val">26.700000762939453</div><div class="lbl">평균 SmartScore</div></div>
+  <div class="card hi"><div class="val">+0.63%p</div><div class="lbl">20일 그로스 스프레드</div></div>
+  <div class="card" style="--accent:#00ff88"><div class="val" style="color:#00ff88">+0.63%p</div><div class="lbl">20일 XS 스프레드</div></div>
+  <div class="card"><div class="val" style="color:#00ff88">+2.07%</div><div class="lbl">TIER1 상위20% 20일 그로스</div></div>
+  <div class="card"><div class="val" style="color:#00ff88">+1.20%</div><div class="lbl">TIER1 상위20% 20일 XS</div></div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  전략B (TIER2+3 중소형주) — 리스크 조정 수익 지표
+  [ISSUE-3/B] 상위20%의 변동성 감소 수치를 상단에 명시
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div style="color:#4a6080;font-size:.72rem;margin:6px 0 6px;letter-spacing:.5px">
+  ▶ 전략B: TIER2+3 중소형주 — 샤프 기반 리스크 필터링
+  <span style="color:#ffd700;margin-left:10px">
+    ⚠️ 변동성 필터 확인 필요
+  </span>
+  &nbsp;|&nbsp;
+  <span style="color:#4a6080;font-size:.7rem">✅ TIER3 역발상(Rank Reversal) 적용 — 저점수 롱 전략</span>
+</div>
+<div class="meta">
+  <div class="card" style="border-color:#ffd70055">
+    <div class="val" style="color:#ffd700">57.2%</div>
+    <div class="lbl">상위20% 변동성(연환산)</div>
+  </div>
+  <div class="card" style="border-color:#ffd70055">
+    <div class="val" style="color:#ffd700">+0.5%p</div>
+    <div class="lbl">변동성 스프레드 (상위-하위)<br><span style="font-size:.65rem;color:#4a6080">음수 = 상위20%가 더 안정적</span></div>
+  </div>
+  <div class="card" style="border-color:#00ff8855">
+    <div class="val" style="color:#00ff88">0.426</div>
+    <div class="lbl">상위20% 평균 연환산 SR</div>
+  </div>
+  <div class="card" style="border-color:#00ff8855">
+    <div class="val" style="color:#00ff88">+0.210</div>
+    <div class="lbl">SR 스프레드 (상위-하위)<br><span style="font-size:.65rem;color:#4a6080">양수 = 리스크 필터 유효</span></div>
+  </div>
+  <div class="card">
+    <div class="val" style="color:#00d4ff">49.0%</div>
+    <div class="lbl">상위20% SR&gt;0.5 히트율<br><span style="font-size:.65rem;color:#4a6080">Sharpe(1994) 기준</span></div>
+  </div>
+</div>
+
+<!-- ①②: 그로스 + XS 구간표 -->
+<div class="g2">
+  <div class="box">
+    <h2>📈 ★ TIER1 대형주 — cs_combo 구간별 수익률 <span class="badge badge-y">전략A: 기관팩터</span></h2>
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2" style="text-align:left">구간</th>
+          <th colspan="5">20일 후</th>
+          <th colspan="5">60일 후</th>
+        </tr>
+        <tr><th>평균</th><th>중앙값</th><th>승률</th><th>샤프</th><th>N</th><th>평균</th><th>중앙값</th><th>승률</th><th>샤프</th><th>N</th></tr>
+      </thead>
+      <tbody><tr><td style="font-weight:700">🔥 80-100 상위20%</td><td style="color:#00ff88">+2.07%</td><td style="color:#00ff88">+1.46%</td><td style="color:#00ff88">57%</td><td style="color:#00ff88">0.53</td><td style="color:#556">150,703</td><td style="color:#00ff88">+5.91%</td><td style="color:#00ff88">+3.99%</td><td style="color:#00ff88">61%</td><td style="color:#ffd700">0.43</td><td style="color:#556">150,703</td></tr><tr><td style="font-weight:700">✅ 60-80 상위40%</td><td style="color:#00ff88">+1.91%</td><td style="color:#00ff88">+1.28%</td><td style="color:#00ff88">57%</td><td style="color:#ffd700">0.49</td><td style="color:#556">146,534</td><td style="color:#00ff88">+5.37%</td><td style="color:#00ff88">+3.59%</td><td style="color:#00ff88">60%</td><td style="color:#ffd700">0.42</td><td style="color:#556">146,534</td></tr><tr><td style="font-weight:700">⚖️ 40-60 중립</td><td style="color:#00ff88">+1.80%</td><td style="color:#00ff88">+1.21%</td><td style="color:#00ff88">56%</td><td style="color:#ffd700">0.48</td><td style="color:#556">146,111</td><td style="color:#00ff88">+5.19%</td><td style="color:#00ff88">+3.32%</td><td style="color:#00ff88">59%</td><td style="color:#ffd700">0.41</td><td style="color:#556">146,111</td></tr><tr><td style="font-weight:700">⚠️ 20-40 하위40%</td><td style="color:#00ff88">+1.43%</td><td style="color:#00ff88">+1.17%</td><td style="color:#00ff88">56%</td><td style="color:#ffd700">0.42</td><td style="color:#556">146,218</td><td style="color:#00ff88">+5.08%</td><td style="color:#00ff88">+3.30%</td><td style="color:#00ff88">59%</td><td style="color:#ffd700">0.41</td><td style="color:#556">146,218</td></tr><tr><td style="font-weight:700">🔴 0-20 하위20%</td><td style="color:#00ff88">+1.44%</td><td style="color:#00ff88">+1.18%</td><td style="color:#00ff88">56%</td><td style="color:#ffd700">0.39</td><td style="color:#556">143,754</td><td style="color:#00ff88">+4.72%</td><td style="color:#00ff88">+2.90%</td><td style="color:#00ff88">58%</td><td style="color:#ffd700">0.36</td><td style="color:#556">143,754</td></tr></tbody>
+    </table>
+    <p class="note">· 그로스: 시장 상승 beta 포함 · 승률 &gt;53% 유효 · 샤프: 연환산</p>
+  </div>
+
+  <div class="box">
+    <h2>📊 ★ TIER1 대형주 — 초과수익률 <span class="badge badge-g">XS(시장중립)</span></h2>
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2" style="text-align:left">구간</th>
+          <th colspan="4">20일 XS</th>
+          <th colspan="4">60일 XS</th>
+        </tr>
+        <tr><th>XS평균</th><th>승률</th><th>샤프</th><th>N</th><th>XS평균</th><th>승률</th><th>샤프</th><th>N</th></tr>
+      </thead>
+      <tbody><tr><td style="font-weight:700">🔥 80-100 상위20%</td><td style="color:#00ff88">+1.20%</td><td style="color:#ffd700">54%</td><td style="color:#ffd700">0.24</td><td style="color:#556">150,703</td><td style="color:#00ff88">+3.09%</td><td style="color:#00ff88">57%</td><td style="color:#ffd700">0.18</td><td style="color:#556">150,703</td></tr><tr><td style="font-weight:700">✅ 60-80 상위40%</td><td style="color:#00ff88">+1.02%</td><td style="color:#ffd700">53%</td><td style="color:#ffd700">0.21</td><td style="color:#556">146,534</td><td style="color:#00ff88">+2.52%</td><td style="color:#00ff88">56%</td><td style="color:#ffd700">0.15</td><td style="color:#556">146,534</td></tr><tr><td style="font-weight:700">⚖️ 40-60 중립</td><td style="color:#00ff88">+0.95%</td><td style="color:#ffd700">53%</td><td style="color:#ffd700">0.20</td><td style="color:#556">146,111</td><td style="color:#00ff88">+2.37%</td><td style="color:#00ff88">56%</td><td style="color:#ffd700">0.15</td><td style="color:#556">146,111</td></tr><tr><td style="font-weight:700">⚠️ 20-40 하위40%</td><td style="color:#00ff88">+0.56%</td><td style="color:#ffd700">53%</td><td style="color:#ffd700">0.12</td><td style="color:#556">146,218</td><td style="color:#00ff88">+2.25%</td><td style="color:#00ff88">56%</td><td style="color:#ffd700">0.14</td><td style="color:#556">146,218</td></tr><tr><td style="font-weight:700">🔴 0-20 하위20%</td><td style="color:#00ff88">+0.57%</td><td style="color:#ffd700">54%</td><td style="color:#ffd700">0.12</td><td style="color:#556">143,754</td><td style="color:#00ff88">+1.90%</td><td style="color:#00ff88">55%</td><td style="color:#ffd700">0.11</td><td style="color:#556">143,754</td></tr></tbody>
+    </table>
+    <p class="note">· XS = 종목수익률 - SPY 동기간 수익률 · 상승장 beta 제거된 순수 알파</p>
+  </div>
+</div>
+
+<!-- ③: 상관계수 + IC -->
+<div class="g2">
+  <div class="box">
+    <h2>🔗 서브컴포넌트 상관계수</h2>
+    <table>
+      <thead><tr><th style="text-align:left">컴포넌트</th><th>20일</th><th>60일</th></tr></thead>
+      <tbody><tr><td style="font-weight:600">거래량 서지(vol_surge)</td><td style="color:#888">+0.008</td><td style="color:#888">+0.004</td></tr><tr><td style="font-weight:600">BB압축 역수</td><td style="color:#888">+0.001</td><td style="color:#888">-0.001</td></tr><tr><td style="font-weight:600">RS vs SPY 5일</td><td style="color:#888">-0.001</td><td style="color:#888">+0.001</td></tr><tr><td style="font-weight:600">가격 가속도(5d-20d/4)</td><td style="color:#888">-0.001</td><td style="color:#888">-0.000</td></tr><tr><td style="font-weight:600">★ CS단기점수</td><td style="color:#888">+0.005</td><td style="color:#888">+0.005</td></tr><tr><td style="font-weight:600">★ CS장기점수</td><td style="color:#888">-0.001</td><td style="color:#888">+0.002</td></tr><tr><td style="font-weight:600">★ CS종합점수</td><td style="color:#888">+0.005</td><td style="color:#888">+0.005</td></tr></tbody>
+    </table>
+    <p class="note">· &gt;0.05 유효 · &lt;0 역방향(빨강) — v11: accel/w52/cons 제거 완료</p>
+  </div>
+
+  <div class="box">
+    <h2>📐 IC 분석 <span class="badge badge-y">Fama-MacBeth</span></h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align:left">팩터</th>
+          <th colspan="3">20일</th>
+          <th colspan="3">60일</th>
+        </tr>
+        <tr><th>IC</th><th>t</th><th>판정</th><th>IC</th><th>t</th><th>판정</th></tr>
+      </thead>
+      <tbody><tr><td style="font-weight:600;color:#c8d8f0">CS단기</td><td style="color:#ffd700;font-family:monospace">+0.0144</td><td style="color:#00ff88;font-family:monospace">+5.88</td><td>⚠️ 약신호</td><td style="color:#ffd700;font-family:monospace">+0.0188</td><td style="color:#00ff88;font-family:monospace">+8.39</td><td>⚠️ 약신호</td></tr><tr><td style="font-weight:600;color:#c8d8f0">CS장기</td><td style="color:#ffd700;font-family:monospace">+0.0009</td><td style="color:#4a6080;font-family:monospace">+0.30</td><td>❌ 비유의</td><td style="color:#ffd700;font-family:monospace">+0.0045</td><td style="color:#ffd700;font-family:monospace">+1.63</td><td>❌ 비유의</td></tr><tr><td style="font-weight:600;color:#c8d8f0">CS종합</td><td style="color:#ffd700;font-family:monospace">+0.0144</td><td style="color:#00ff88;font-family:monospace">+5.88</td><td>⚠️ 약신호</td><td style="color:#ffd700;font-family:monospace">+0.0188</td><td style="color:#00ff88;font-family:monospace">+8.39</td><td>⚠️ 약신호</td></tr><tr><td style="font-weight:600;color:#c8d8f0">절대SSE(구버전)</td><td style="color:#ff4466;font-family:monospace">-0.0041</td><td style="color:#4a6080;font-family:monospace">-1.30</td><td>❌ 비유의</td><td style="color:#ffd700;font-family:monospace">+0.0059</td><td style="color:#ffd700;font-family:monospace">+1.93</td><td>❌ 비유의</td></tr><tr><td style="font-weight:600;color:#c8d8f0">★예측점수v11(cs_combo퍼센타일)</td><td style="color:#ffd700;font-family:monospace">+0.0144</td><td style="color:#00ff88;font-family:monospace">+5.88</td><td>⚠️ 약신호</td><td style="color:#ffd700;font-family:monospace">+0.0188</td><td style="color:#00ff88;font-family:monospace">+8.39</td><td>⚠️ 약신호</td></tr></tbody>
+    </table>
+    <p class="note">· IC &gt;0.02 &amp; t &gt;2.0 유의 · ICIR &gt;0.5 강한팩터 · &gt;0.03 헤지펀드급</p>
+  </div>
+</div>
+
+<!-- ④: 상위/하위 추이 차트 -->
+<h2>📉 상위 20% vs 하위 20% 20일 수익률 추이 <span class="badge badge-y">30일 MA</span></h2>
+<div class="chart-wrap">
+  <canvas id="tbChart" height="70"></canvas>
+  <p class="note">· 초록(상위20%)이 빨강(하위20%)보다 지속적으로 위에 있을수록 신호 유효</p>
+</div>
+
+<script>
+new Chart(document.getElementById('tbChart'), {
+  type:'line',
+  data:{
+    labels:["2025-06-18", "2025-06-20", "2025-06-23", "2025-06-24", "2025-06-25", "2025-06-26", "2025-06-27", "2025-06-30", "2025-07-01", "2025-07-02", "2025-07-03", "2025-07-07", "2025-07-08", "2025-07-09", "2025-07-10", "2025-07-11", "2025-07-14", "2025-07-15", "2025-07-16", "2025-07-17", "2025-07-18", "2025-07-21", "2025-07-22", "2025-07-23", "2025-07-24", "2025-07-25", "2025-07-28", "2025-07-29", "2025-07-30", "2025-07-31", "2025-08-01", "2025-08-04", "2025-08-05", "2025-08-06", "2025-08-07", "2025-08-08", "2025-08-11", "2025-08-12", "2025-08-13", "2025-08-14", "2025-08-15", "2025-08-18", "2025-08-19", "2025-08-20", "2025-08-21", "2025-08-22", "2025-08-25", "2025-08-26", "2025-08-27", "2025-08-28", "2025-08-29", "2025-09-02", "2025-09-03", "2025-09-04", "2025-09-05", "2025-09-08", "2025-09-09", "2025-09-10", "2025-09-11", "2025-09-12", "2025-09-15", "2025-09-16", "2025-09-17", "2025-09-18", "2025-09-19", "2025-09-22", "2025-09-23", "2025-09-24", "2025-09-25", "2025-09-26", "2025-09-29", "2025-09-30", "2025-10-01", "2025-10-02", "2025-10-03", "2025-10-06", "2025-10-07", "2025-10-08", "2025-10-09", "2025-10-10", "2025-10-13", "2025-10-14", "2025-10-15", "2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-28", "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-08"],
+    datasets:[
+      {label:'상위 20% (강매집)',data:[2.21, 2.05, 1.96, 1.86, 1.88, 1.89, 1.85, 1.75, 1.8, 1.85, 1.78, 1.64, 1.41, 1.15, 1.08, 0.84, 0.65, 0.55, 0.54, 0.37, 0.2, -0.0, -0.15, -0.36, -0.46, -0.54, -0.58, -0.58, -0.45, -0.46, -0.43, -0.56, -0.61, -0.65, -0.71, -0.7, -0.73, -0.68, -0.78, -0.73, -0.53, -0.36, -0.17, 0.07, 0.18, 0.37, 0.54, 0.53, 0.45, 0.43, 0.52, 0.69, 0.79, 1.03, 1.14, 1.44, 1.57, 1.79, 1.83, 1.83, 1.88, 2.06, 2.21, 2.27, 2.23, 2.18, 2.13, 2.18, 2.28, 2.24, 2.21, 2.15, 2.13, 1.92, 1.83, 1.75, 1.6, 1.53, 1.44, 1.45, 1.34, 1.19, 1.05, 0.73, 0.58, 0.24, -0.03, -0.43, -0.76, -1.0, -1.27, -1.55, -1.76, -1.83, -1.84, -1.72, -1.5, -1.38, -1.21, -1.08, -1.04, -0.96, -0.79, -0.49, -0.24, 0.06, 0.31, 0.49, 0.84, 1.09, 1.28, 1.44, 1.56, 1.75, 1.87, 2.03, 2.19, 2.28, 2.4, 2.5],
+        borderColor:'#00ff88',backgroundColor:'rgba(0,255,136,.07)',
+        borderWidth:1.5,pointRadius:0,fill:true,tension:0.3},
+      {label:'하위 20% (매도압력)',data:[2.05, 2.06, 2.05, 2.06, 2.14, 2.2, 2.06, 2.06, 2.03, 1.95, 1.84, 1.74, 1.63, 1.43, 1.3, 1.23, 1.07, 1.06, 1.22, 1.16, 1.18, 1.16, 1.19, 1.22, 1.27, 1.36, 1.36, 1.42, 1.41, 1.48, 1.53, 1.52, 1.52, 1.46, 1.44, 1.52, 1.6, 1.67, 1.79, 1.97, 2.08, 2.15, 2.31, 2.55, 2.83, 3.02, 3.29, 3.28, 3.14, 3.14, 3.07, 3.14, 3.31, 3.43, 3.5, 3.6, 3.68, 3.71, 3.69, 3.51, 3.37, 3.32, 3.29, 3.23, 3.09, 2.92, 2.75, 2.66, 2.64, 2.61, 2.63, 2.64, 2.53, 2.29, 1.99, 1.7, 1.49, 1.52, 1.5, 1.56, 1.54, 1.49, 1.35, 1.28, 1.22, 1.08, 1.01, 0.92, 0.89, 0.75, 0.6, 0.46, 0.39, 0.43, 0.46, 0.53, 0.61, 0.62, 0.67, 0.67, 0.75, 0.75, 0.92, 1.16, 1.35, 1.58, 1.75, 1.75, 1.93, 2.01, 2.03, 2.03, 1.95, 1.81, 1.69, 1.68, 1.59, 1.5, 1.5, 1.65],
+        borderColor:'#ff3366',backgroundColor:'rgba(255,51,102,.07)',
+        borderWidth:1.5,pointRadius:0,fill:true,tension:0.3},
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{labels:{color:'#c8d8f0',font:{size:11}}}},
+    scales:{
+      x:{ticks:{color:'#4a6080',maxTicksLimit:12,font:{size:10}},grid:{color:'#0a1428'}},
+      y:{ticks:{color:'#4a6080',callback:v=>v+'%'},grid:{color:'#1a2f50'},
+          title:{display:true,text:'20일 평균 수익률',color:'#4a6080'}}
+    }
+  }
+});
+</script>
+
+<!-- TIER3 별도 섹션 -->
+<div style="background:#0a1428;border:1px solid #ff885533;border-radius:10px;padding:20px;margin-bottom:20px"><h2 style="color:#ff8855;margin-bottom:10px">⚡ TIER3 고베타 소형주 — 역발상 전략 (Rank Reversal 적용)</h2><div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px"><div style="background:#0f1e35;padding:8px 16px;border-radius:6px;border-left:3px solid #ff8855;font-size:.78rem"><span style="color:#ff8855;font-weight:700">U자형 현상</span><span style="color:#4a6080;margin-left:8px">IC=+0.04(신호 정상) BUT 하위20% 수익 > 상위20% → 역발상 필요</span></div><div style="background:#0f1e35;padding:8px 16px;border-radius:6px;border-left:3px solid #00ff88;font-size:.78rem"><span style="color:#00ff88;font-weight:700">✅ Rank Reversal 적용</span><span style="color:#4a6080;margin-left:8px">cs_combo = 100-cs_combo → 저점수(침체) 종목을 상위로 역전</span></div><div style="background:#0f1e35;padding:8px 16px;border-radius:6px;border-left:3px solid #aa88ff;font-size:.78rem"><span style="color:#aa88ff;font-weight:700">근거</span><span style="color:#4a6080;margin-left:8px">Jegadeesh&amp;Titman(2001) 소형주 과잉반응 후 Mean Reversion</span></div></div><p style="color:#4a6080;font-size:.78rem;margin-bottom:10px">아래 표는 Rank Reversal 적용 후 구간별 성과. 상위20%(🔥)가 역발상 후 실제로 높은 수익률을 보이면 전략 유효.</p><table style="width:100%;border-collapse:collapse;font-size:.82rem"><thead><tr style="background:#0f1e35"><th style="text-align:left;color:#4a6080">구간(역발상 후)</th><th style="color:#4a6080">20일 평균</th><th style="color:#4a6080">20일 승률</th><th style="color:#4a6080">N</th><th style="color:#4a6080">60일 평균</th><th style="color:#4a6080">60일 승률</th><th style="color:#4a6080">N</th></tr></thead><tbody><tr><td style="font-weight:700">🔥 80-100 상위20%</td><td style="color:#00ff88">+7.85%</td><td style="color:#ffd700">48%</td><td style="color:#556">23,751</td><td style="color:#00ff88">+25.54%</td><td style="color:#ffd700">49%</td><td style="color:#556">23,751</td></tr><tr><td style="font-weight:700">✅ 60-80 상위40%</td><td style="color:#00ff88">+5.42%</td><td style="color:#ffd700">48%</td><td style="color:#556">22,656</td><td style="color:#00ff88">+19.71%</td><td style="color:#ffd700">49%</td><td style="color:#556">22,656</td></tr><tr><td style="font-weight:700">⚖️ 40-60 중립</td><td style="color:#00ff88">+4.82%</td><td style="color:#ffd700">48%</td><td style="color:#556">22,640</td><td style="color:#00ff88">+18.84%</td><td style="color:#ffd700">48%</td><td style="color:#556">22,640</td></tr><tr><td style="font-weight:700">⚠️ 20-40 하위40%</td><td style="color:#00ff88">+5.23%</td><td style="color:#ffd700">47%</td><td style="color:#556">22,657</td><td style="color:#00ff88">+18.98%</td><td style="color:#ffd700">48%</td><td style="color:#556">22,657</td></tr><tr><td style="font-weight:700">🔴 0-20 하위20%</td><td style="color:#00ff88">+5.75%</td><td style="color:#ffd700">48%</td><td style="color:#556">23,070</td><td style="color:#00ff88">+19.21%</td><td style="color:#ffd700">51%</td><td style="color:#556">23,070</td></tr></tbody></table><p style="color:#4a6080;font-size:.75rem;margin-top:8px">💡 상위20%(🔥) = 역발상 후 "원래 점수 낮던" 침체 종목. TIER1+2 메인 포트폴리오와 독립 운영 권장.</p></div>
+
+<!-- v6 검증 섹션 -->
+<h2 style="margin-top:40px;color:#00d4ff;border-bottom:2px solid #1a2f50;padding-bottom:8px">🛡️ v6 펀드-그레이드 검증 결과 (6종)</h2><div style="background:#0a1428;border:1px solid #00d4ff33;border-radius:10px;padding:20px;margin-bottom:20px"><h3 style="color:#00d4ff;margin-bottom:10px">① 룩어헤드 바이어스 제거 (LookAheadGuard)</h3><p style="color:#4a6080;font-size:.78rem;margin-bottom:8px">Lopez de Prado 'Advances in Financial ML' Ch.4</p><table style="width:100%;border-collapse:collapse;font-size:.82rem"><tr><td style="color:#4a6080;padding:6px">총 호출 수</td><td style="color:#00d4ff;font-family:monospace">20,367회</td><td style="color:#4a6080;padding:6px">캐시 히트율</td><td style="color:#00ff88;font-family:monospace">89.2%</td><td style="color:#4a6080;padding:6px">위반 감지</td><td style="color:#00ff88;font-family:monospace">0건 ✅ 없음</td></tr></table><p style="color:#00ff88;margin-top:8px;font-size:.8rem">✅ 모든 시점에서 spy.iloc[:i+1] 슬라이싱 — 미래 데이터 혼입 차단</p></div><div style="background:#0a1428;border:1px solid #ffd70033;border-radius:10px;padding:20px;margin-bottom:20px"><h3 style="color:#ffd700;margin-bottom:10px">② 복수검정 보정 (BH-FDR + Bonferroni)</h3><p style="color:#4a6080;font-size:.78rem;margin-bottom:8px">BH: B&H 1995 | Bonferroni: Dunn 1961 | 5개 동시검정 → 위양성 22.6% 차단</p><table style="width:100%;border-collapse:collapse;font-size:.8rem"><tr style="background:#0f1e35"><th style="color:#4a6080;text-align:left;padding:6px">팩터</th><th style="color:#4a6080">t-stat</th><th style="color:#4a6080">p값</th><th style="color:#4a6080">BH-FDR</th><th style="color:#4a6080">Bonferroni</th><th style="color:#4a6080">판정</th></tr><tr><td style="color:#c8d8f0">CS단기</td><td style="color:#4a6080;font-family:monospace">5.880</td><td style="color:#4a6080;font-family:monospace">0.0000</td><td style="color:#00ff88">✅ BH</td><td style="color:#00ff88">✅ Bonf</td><td style="color:#00ff88;font-weight:700">⭐ 강한신호</td></tr><tr><td style="color:#c8d8f0">CS장기</td><td style="color:#4a6080;font-family:monospace">0.300</td><td style="color:#4a6080;font-family:monospace">0.7642</td><td style="color:#ff3366">❌ BH</td><td style="color:#ff3366">❌ Bonf</td><td style="color:#4a6080;font-weight:700">—</td></tr><tr><td style="color:#c8d8f0">CS종합</td><td style="color:#4a6080;font-family:monospace">5.880</td><td style="color:#4a6080;font-family:monospace">0.0000</td><td style="color:#00ff88">✅ BH</td><td style="color:#00ff88">✅ Bonf</td><td style="color:#00ff88;font-weight:700">⭐ 강한신호</td></tr><tr><td style="color:#c8d8f0">절대SSE(구버전)</td><td style="color:#4a6080;font-family:monospace">-1.300</td><td style="color:#4a6080;font-family:monospace">0.1937</td><td style="color:#ff3366">❌ BH</td><td style="color:#ff3366">❌ Bonf</td><td style="color:#4a6080;font-weight:700">—</td></tr><tr><td style="color:#c8d8f0">★예측점수v11(cs_combo퍼센타일)</td><td style="color:#4a6080;font-family:monospace">5.880</td><td style="color:#4a6080;font-family:monospace">0.0000</td><td style="color:#00ff88">✅ BH</td><td style="color:#00ff88">✅ Bonf</td><td style="color:#00ff88;font-weight:700">⭐ 강한신호</td></tr></table></div><div style="background:#0a1428;border:1px solid #ff885533;border-radius:10px;padding:20px;margin-bottom:20px"><h3 style="color:#ff8855;margin-bottom:10px">③ 거래비용 반영 (수수료+슬리피지+충격)</h3><p style="color:#4a6080;font-size:.78rem;margin-bottom:8px">Fidelity/Schwab 0.05% | Kissell(2013) | Almgren-Chriss(2001) k=0.5</p><table style="width:100%;border-collapse:collapse;font-size:.82rem"><tr style="background:#0f1e35"><th style="color:#4a6080;text-align:left;padding:8px">지표</th><th style="color:#4a6080">그로스(비용전)</th><th style="color:#4a6080">순수익(비용후)</th><th style="color:#4a6080">드래그</th></tr><tr><td style="color:#c8d8f0;padding:6px">평균 20일 수익 (상위20%)</td><td style="color:#00ff88;font-family:monospace">+2.07%</td><td style="color:#00ff88;font-family:monospace">+1.668%</td><td style="color:#ffd700;font-family:monospace">0.402%p</td></tr><tr><td style="color:#c8d8f0;padding:6px">샤프(95% CI 하한)</td><td style="color:#00ff88;font-family:monospace">0.599 [0.371~]</td><td style="color:#00ff88;font-family:monospace">0.437 [0.280~]</td><td style="color:#ffd700;font-family:monospace">0.162</td></tr></table><p style="color:#4a6080;font-size:.75rem;margin-top:8px">✅ 비용 후에도 통계적 양수 수익</p></div><div style="background:#0a1428;border:1px solid #00ff8833;border-radius:10px;padding:20px;margin-bottom:20px"><h3 style="color:#00ff88;margin-bottom:10px">④ Roll-Forward OOS (3년훈/1년테/12개월 스텝)</h3><p style="color:#4a6080;font-size:.78rem;margin-bottom:8px">Lopez de Prado (2018) Ch.12 | 양수폴드≥70% ∧ 평균IC≥0.01 → 안정 (70% rule)</p><div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px"><div style="background:#0f1e35;padding:10px 18px;border-radius:8px;text-align:center"><div style="color:#00d4ff;font-size:1.2rem;font-family:monospace;font-weight:700">+0.0148</div><div style="color:#4a6080;font-size:.72rem">평균 OOS-IC</div></div><div style="background:#0f1e35;padding:10px 18px;border-radius:8px;text-align:center"><div style="color:#00ff88;font-size:1.2rem;font-family:monospace;font-weight:700">67%</div><div style="color:#4a6080;font-size:.72rem">양수 폴드 비율</div></div><div style="background:#0f1e35;padding:10px 18px;border-radius:8px;text-align:center"><div style="color:#ffd700;font-size:.95rem;font-weight:700">⚠️  재최적화 필요</div><div style="color:#4a6080;font-size:.72rem">양수폴드≥70% ∧ IC≥0.01</div></div></div><table style="width:100%;border-collapse:collapse;font-size:.8rem"><tr style="background:#0f1e35"><th style="color:#4a6080;text-align:left;padding:6px">테스트 연도</th><th style="color:#4a6080">훈련 기간</th><th style="color:#4a6080">OOS IC</th><th style="color:#4a6080">N(테스트)</th></tr><tr><td style="color:#c8d8f0;font-family:monospace">2020-03</td><td style="color:#4a6080;font-family:monospace">2017-03~2020-03</td><td style="color:#00ff88;font-family:monospace;font-weight:700">+0.0304</td><td style="color:#4a6080">86,404</td></tr><tr><td style="color:#c8d8f0;font-family:monospace">2021-03</td><td style="color:#4a6080;font-family:monospace">2018-03~2021-03</td><td style="color:#ff3366;font-family:monospace;font-weight:700">-0.0070</td><td style="color:#4a6080">96,301</td></tr><tr><td style="color:#c8d8f0;font-family:monospace">2022-03</td><td style="color:#4a6080;font-family:monospace">2019-03~2022-03</td><td style="color:#00ff88;font-family:monospace;font-weight:700">+0.0227</td><td style="color:#4a6080">110,983</td></tr><tr><td style="color:#c8d8f0;font-family:monospace">2023-03</td><td style="color:#4a6080;font-family:monospace">2020-03~2023-03</td><td style="color:#00ff88;font-family:monospace;font-weight:700">+0.0196</td><td style="color:#4a6080">114,697</td></tr><tr><td style="color:#c8d8f0;font-family:monospace">2024-03</td><td style="color:#4a6080;font-family:monospace">2021-03~2024-03</td><td style="color:#ff3366;font-family:monospace;font-weight:700">-0.0092</td><td style="color:#4a6080">114,853</td></tr><tr><td style="color:#c8d8f0;font-family:monospace">2025-03</td><td style="color:#4a6080;font-family:monospace">2022-03~2025-03</td><td style="color:#00ff88;font-family:monospace;font-weight:700">+0.0324</td><td style="color:#4a6080">88,051</td></tr></table></div><div style="background:#0a1428;border:1px solid #aa88ff33;border-radius:10px;padding:20px;margin-bottom:20px"><h3 style="color:#aa88ff;margin-bottom:10px">⑤ Bootstrap 신뢰구간 (B=1000, Stationary Block)</h3><p style="color:#4a6080;font-size:.78rem;margin-bottom:8px">Politis &amp; Romano (1994) | 블록길이=√n | Ledoit &amp; Wolf (2008) Sharpe CI</p><table style="width:100%;border-collapse:collapse;font-size:.8rem"><tr style="background:#0f1e35"><th style="color:#4a6080;text-align:left;padding:6px">점수</th><th style="color:#4a6080">IC 95% CI</th><th style="color:#4a6080">CI하한>0</th><th style="color:#4a6080">Sharpe(순) CI</th><th style="color:#4a6080">SR>0.5∧CI>0</th><th style="color:#4a6080">순수익 유의</th></tr><tr><td style="color:#c8d8f0;padding:6px">CS단기</td><td style="color:#aa88ff;font-family:monospace">[0.0005, 0.0300]</td><td style="color:#00ff88">✅</td><td style="color:#aa88ff;font-family:monospace">[0.280, 1.423]</td><td style="color:#ff3366">❌</td><td style="color:#00ff88">✅ +1.668%</td></tr><tr><td style="color:#c8d8f0;padding:6px">CS장기</td><td style="color:#aa88ff;font-family:monospace">[-0.0178, 0.0195]</td><td style="color:#ff3366">❌</td><td style="color:#aa88ff;font-family:monospace">[0.284, 1.432]</td><td style="color:#ff3366">❌</td><td style="color:#00ff88">✅ +1.668%</td></tr><tr><td style="color:#c8d8f0;padding:6px">CS종합</td><td style="color:#aa88ff;font-family:monospace">[0.0004, 0.0299]</td><td style="color:#00ff88">✅</td><td style="color:#aa88ff;font-family:monospace">[0.282, 1.414]</td><td style="color:#ff3366">❌</td><td style="color:#00ff88">✅ +1.668%</td></tr></table><p style="color:#4a6080;font-size:.75rem;margin-top:6px">B=1000 Stationary Block Bootstrap (블록길이=√n) | CI하한>0 → 정규분포 가정 없이 확인</p></div><div style="background:#0a1428;border:1px solid #ff669933;border-radius:10px;padding:20px;margin-bottom:20px"><h3 style="color:#ff6699;margin-bottom:10px">⑥ 국면별 성과 분리 (Bull/Sideways/Bear)</h3><p style="color:#4a6080;font-size:.78rem;margin-bottom:8px">Faber(2007) SMA200 | Lo et al.(2000) SMA50 | CBOE VIX 중앙값 vol 15%</p><table style="width:100%;border-collapse:collapse;font-size:.82rem"><tr style="background:#0f1e35"><th style="color:#4a6080;text-align:left;padding:6px">국면</th><th style="color:#4a6080">IC평균</th><th style="color:#4a6080">t-stat</th><th style="color:#4a6080">ICIR</th><th style="color:#4a6080">평균수익</th><th style="color:#4a6080">샤프</th><th style="color:#4a6080">승률</th><th style="color:#4a6080">N</th><th style="color:#4a6080">유의</th></tr><tr><td style="color:#ffd700;font-weight:700;padding:8px">🟡 SIDEWAYS</td><td style="color:#00ff88;font-family:monospace">+0.0144</td><td style="color:#c8d8f0;font-family:monospace">+5.88</td><td style="color:#c8d8f0;font-family:monospace">+0.125</td><td style="color:#00ff88;font-family:monospace">+2.29%</td><td style="color:#00ff88;font-family:monospace">+0.13</td><td style="color:#c8d8f0;font-family:monospace">55%</td><td style="color:#4a6080">848,094</td><td>⚠️</td></tr></table><p style="color:#4a6080;font-size:.75rem;margin-top:8px">Bull-Bear IC 스프레드: <span style="color:#00ff88;font-family:monospace">+0.0000</span>→ ✅  국면 무관 안정</p></div>
+
+</body>
+</html>
